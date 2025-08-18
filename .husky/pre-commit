@@ -52,8 +52,4 @@ if [ "$warn_found" = true ]; then
   echo "⚠️  Commit continuing, but review warnings above."
 fi
 
-# Optional: format only staged files via lint-staged (faster)
-# npx --no-install lint-staged
-
-# Or: format whole repo (slower)
-# npx prettier --write .
+npx --no-install lint-staged
