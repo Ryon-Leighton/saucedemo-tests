@@ -110,7 +110,7 @@ jobs:
           mkdir -p k6/out
           chmod +x k6/run.sh
 
-      - name: Run k6 smoke + small-load (Docker)
+      - name: Run k6 (Docker)
         id: run_k6
         continue-on-error: true
         env:
