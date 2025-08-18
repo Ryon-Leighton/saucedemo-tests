@@ -4,9 +4,9 @@ Playwright + BDD (Gherkin) UI tests, lightweight API checks, and k6 smoke/load t
 
 ## Structure
 
-- `e2e/` – BDD features, steps, support, and generated specs  
-  - `features/**/*.feature`  
-  - `steps/**/*.ts`  
+- `e2e/` – BDD features, steps, support, and generated specs
+  - `features/**/*.feature`
+  - `steps/**/*.ts`
   - `generated/` (output from `playwright-bdd`)
 - `e2e/api/` – API smoke tests
 - `playwright.config.ts` – BDD/UI config
@@ -26,7 +26,7 @@ Playwright + BDD (Gherkin) UI tests, lightweight API checks, and k6 smoke/load t
 
 ## Requirements
 
-- Node 18+ and npm, or Docker 24+  
+- Node 18+ and npm, or Docker 24+
 - Optional: `.env` for local `BASE_URL`, etc.
 
 ## Install (Node)
@@ -91,6 +91,8 @@ The workflow:
 3. Run **BDD/UI** tests → upload `playwright-report-e2e/` + `test-results-e2e/`.
 4. Run **k6** via official image + `k6/run.sh` → upload `k6/out/`.
 5. Fail the job if any suite fails.
+
+To run the workflow manually, go to your repo’s Actions tab, pick the Playwright Tests workflow in the left sidebar, then click Run workflow (top-right), choose the branch (e.g. main), and hit Run workflow.
 
 **Artifacts**
 
