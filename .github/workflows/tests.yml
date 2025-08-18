@@ -103,3 +103,39 @@ jobs:
       - name: Fail job if E2E failed
         if: ${{ steps.run_e2e.outcome == 'failure' }}
         run: exit 1
+
+      # ---------- k6 (JS) ----------
+      - name: Prepare k6 output dir & make runner executable
+        run: |
+          mkdir -p k6/out
+          chmod +x k6/run.sh
+
+      - name: Run k6 smoke + small-load (Docker)
+        id: run_k6
+        continue-on-error: true
+        env:
+          BASE_URL: https://www.saucedemo.com/
+        run: |
+          set +e
+          docker run --rm \
+            --entrypoint /bin/sh \
+            -e BASE_URL="${BASE_URL}" \
+            -e K6_TEST=all \
+            -v "${{ github.workspace }}/k6:/scripts" \
+            grafana/k6:latest /scripts/run.sh
+          code=$?
+          echo "code=$code" >> $GITHUB_OUTPUT
+          exit 0
+
+      - name: Upload k6 results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results
+          path: k6/out/
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Fail job if k6 failed
+        if: ${{ steps.run_k6.outputs.code != '0' }}
+        run: exit 1
