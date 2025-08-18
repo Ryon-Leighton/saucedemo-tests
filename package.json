@@ -1,0 +1,31 @@
+{
+  "name": "saucedemo-tests",
+  "version": "1.0.0",
+  "description": "Example test framework",
+  "homepage": "https://github.com/Ryon-Leighton/saucedemo-tests#readme",
+  "bugs": {
+    "url": "https://github.com/Ryon-Leighton/saucedemo-tests/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ryon-Leighton/saucedemo-tests.git"
+  },
+  "license": "ISC",
+  "author": "Ryon Leighton",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "bdd": "bddgen",
+    "test": "playwright test",
+    "test:bdd": "bddgen && playwright test",
+    "test:api": "playwright test api -c playwright.api.config.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^24.2.0",
+    "dotenv": "^17.2.1",
+    "husky": "^9.1.7",
+    "playwright-bdd": "^8.3.1",
+    "prettier": "^3.6.2"
+  }
+}

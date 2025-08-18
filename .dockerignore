@@ -1,0 +1,6 @@
+node_modules
+playwright-report
+e2e/generated
+.git
+.gitignore
+.DS_Store

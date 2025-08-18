@@ -1,0 +1,54 @@
+name: saucedemo-tests
+
+networks:
+  lowmtu:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1420
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: e2e/Dockerfile
+    shm_size: 1g
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      CI: "true"
+      BASE_URL: ${BASE_URL:-https://www.saucedemo.com/}
+    dns: [1.1.1.1, 8.8.8.8]
+    networks: [lowmtu]
+    volumes:
+      - ./playwright-report-api:/app/playwright-report
+      - ./test-results-api:/app/test-results
+    command: >
+      sh -lc "npx playwright test -c playwright.api.config.ts"
+
+  e2e:
+    build:
+      context: .
+      dockerfile: e2e/Dockerfile   # <-- this was missing
+    shm_size: 1g
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      CI: "true"
+      BASE_URL: ${BASE_URL:-https://www.saucedemo.com/}
+      GREP: ${GREP:-}
+    dns: [1.1.1.1, 8.8.8.8]
+    networks: [lowmtu]
+    volumes:
+      - ./playwright-report-e2e:/app/playwright-report
+      - ./test-results-e2e:/app/test-results
+    command: >
+      sh -lc "
+        npx bddgen &&
+        if [ -n \"$GREP\" ]; then
+          npx playwright test --grep \"$GREP\";
+        else
+          npx playwright test;
+        fi
+      "

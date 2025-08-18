@@ -1,0 +1,37 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+warn_found=false
+
+# ---- BLOCKERS: .only (JS/TS) and @only (.feature) ----
+if git diff --cached --name-only | grep -E '\.(test|spec)\.(js|ts|jsx|tsx)$' \
+  | xargs grep -n --color=always '\.only' --with-filename --no-messages; then
+  echo "❌ Commit blocked: '.only' found in staged JS/TS test files."
+  exit 1
+fi
+
+if git diff --cached --name-only | grep -E '\.feature$' \
+  | xargs grep -n --color=always '@only' --with-filename --no-messages; then
+  echo "❌ Commit blocked: '@only' tag found in staged .feature files."
+  exit 1
+fi
+
+# ---- WARNINGS: .skip (JS/TS) and @skip (.feature) ----
+if git diff --cached --name-only | grep -E '\.(test|spec)\.(js|ts|jsx|tsx)$' \
+  | xargs grep -n --color=always '\.skip' --with-filename --no-messages; then
+  echo "⚠️  WARNING: '.skip' found in staged JS/TS test files."
+  warn_found=true
+fi
+
+if git diff --cached --name-only | grep -E '\.feature$' \
+  | xargs grep -n --color=always '@skip' --with-filename --no-messages; then
+  echo "⚠️  WARNING: '@skip' tag found in staged .feature files."
+  warn_found=true
+fi
+
+if [ "$warn_found" = true ]; then
+  echo "⚠️  Commit continuing, but review warnings above."
+fi
+
+# Optional: format staged files
+npx prettier --write .
