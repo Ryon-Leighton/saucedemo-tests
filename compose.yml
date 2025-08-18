@@ -16,7 +16,7 @@ services:
     env_file:
       - .env
     environment:
-      CI: "true"
+      CI: 'true'
       BASE_URL: ${BASE_URL:-https://www.saucedemo.com/}
     dns: [1.1.1.1, 8.8.8.8]
     networks: [lowmtu]
@@ -29,13 +29,13 @@ services:
   e2e:
     build:
       context: .
-      dockerfile: e2e/Dockerfile   # <-- this was missing
+      dockerfile: e2e/Dockerfile # <-- this was missing
     shm_size: 1g
     working_dir: /app
     env_file:
       - .env
     environment:
-      CI: "true"
+      CI: 'true'
       BASE_URL: ${BASE_URL:-https://www.saucedemo.com/}
       GREP: ${GREP:-}
     dns: [1.1.1.1, 8.8.8.8]

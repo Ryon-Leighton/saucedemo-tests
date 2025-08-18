@@ -30,9 +30,9 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
   },
   reporter: [
-  ['list'],
-  ['junit', { outputFile: 'test-results/e2e.xml' }],
-  ['html',  { outputFolder: 'playwright-report', open: 'never' }],
+    ['list'],
+    ['junit', { outputFile: 'test-results/e2e.xml' }],
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
   ],
 
   /* Configure projects for major browsers */

@@ -9,9 +9,12 @@ Given('I navigate to the login page', async ({ page }) => {
 });
 
 // --- Login actions ---
-When('I login with {string} and password {string}', async ({ loginPage }, user: string, pass: string) => {
-  await loginPage.login(user, pass);
-});
+When(
+  'I login with {string} and password {string}',
+  async ({ loginPage }, user: string, pass: string) => {
+    await loginPage.login(user, pass);
+  }
+);
 
 When('I login with {string} and {string}', async ({ loginPage }, user: string, pass: string) => {
   await loginPage.login(user, pass);

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.use({ baseURL: 'https://www.saucedemo.com/' }); 
+test.use({ baseURL: 'https://www.saucedemo.com/' });
 
 test('root returns HTML shell', async ({ request }) => {
   const res = await request.get('/');

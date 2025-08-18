@@ -1,0 +1,20 @@
+# Node & build
+node_modules/
+dist/
+build/
+coverage/
+
+# Playwright outputs
+playwright-report/
+playwright-report-*/
+playwright-report-api/
+playwright-report-e2e/
+test-results/
+test-results-*/
+
+# BDD generated specs
+e2e/generated/
+
+# Misc
+*.log
+.DS_Store
