@@ -1,6 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 warn_found=false
 
 # ---- BLOCKERS: .only (JS/TS) and @only (.feature) ----
@@ -33,5 +30,5 @@ if [ "$warn_found" = true ]; then
   echo "⚠️  Commit continuing, but review warnings above."
 fi
 
-# Optional: format staged files
+# Optional: format staged files (consider lint-staged for speed)
 npx prettier --write .
