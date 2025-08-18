@@ -27,7 +27,7 @@ Playwright + BDD (Gherkin) UI tests, lightweight API checks, and k6 smoke/load t
 ## Requirements
 
 - Node 18+ and npm, or Docker 24+
-- Optional: `.env` for local `BASE_URL`, etc.
+- Optional: `.env` for local `BASE_URL`, etc. (this is in the repo and juts used as a POC)
 
 ## Install (Node)
 
