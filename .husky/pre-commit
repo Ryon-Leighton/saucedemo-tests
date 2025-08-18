@@ -1,28 +1,50 @@
+
 warn_found=false
 
+# Helper: list staged files, null-delimited (space/newline safe)
+staged() {
+  git diff --cached --name-only -z
+}
+
 # ---- BLOCKERS: .only (JS/TS) and @only (.feature) ----
-if git diff --cached --name-only | grep -E '\.(test|spec)\.(js|ts|jsx|tsx)$' \
-  | xargs grep -n --color=always '\.only' --with-filename --no-messages; then
-  echo "❌ Commit blocked: '.only' found in staged JS/TS test files."
+
+# Block JS/TS .only
+only_js=$(staged | grep -zE '\.(test|spec)\.(js|jsx|ts|tsx)$' \
+  | xargs -0 -r grep -n --color=never -E '\.only\b' -- 2>/dev/null \
+  | cut -d: -f1,2)
+if [ -n "$only_js" ]; then
+  echo "❌ Commit blocked: '.only' found in staged JS/TS test files:"
+  echo "$only_js" | sed 's/^/  - /'
   exit 1
 fi
 
-if git diff --cached --name-only | grep -E '\.feature$' \
-  | xargs grep -n --color=always '@only' --with-filename --no-messages; then
-  echo "❌ Commit blocked: '@only' tag found in staged .feature files."
+# Block .feature @only
+only_feat=$(staged | grep -zE '\.feature$' \
+  | xargs -0 -r grep -n --color=never -E '@only\b' -- 2>/dev/null \
+  | cut -d: -f1,2)
+if [ -n "$only_feat" ]; then
+  echo "❌ Commit blocked: '@only' tag found in staged .feature files:"
+  echo "$only_feat" | sed 's/^/  - /'
   exit 1
 fi
 
 # ---- WARNINGS: .skip (JS/TS) and @skip (.feature) ----
-if git diff --cached --name-only | grep -E '\.(test|spec)\.(js|ts|jsx|tsx)$' \
-  | xargs grep -n --color=always '\.skip' --with-filename --no-messages; then
-  echo "⚠️  WARNING: '.skip' found in staged JS/TS test files."
+
+skip_js=$(staged | grep -zE '\.(test|spec)\.(js|jsx|ts|tsx)$' \
+  | xargs -0 -r grep -n --color=never -E '\.skip\b' -- 2>/dev/null \
+  | cut -d: -f1,2)
+if [ -n "$skip_js" ]; then
+  echo "⚠️  WARNING: '.skip' found in staged JS/TS test files:"
+  echo "$skip_js" | sed 's/^/  - /'
   warn_found=true
 fi
 
-if git diff --cached --name-only | grep -E '\.feature$' \
-  | xargs grep -n --color=always '@skip' --with-filename --no-messages; then
-  echo "⚠️  WARNING: '@skip' tag found in staged .feature files."
+skip_feat=$(staged | grep -zE '\.feature$' \
+  | xargs -0 -r grep -n --color=never -E '@skip\b' -- 2>/dev/null \
+  | cut -d: -f1,2)
+if [ -n "$skip_feat" ]; then
+  echo "⚠️  WARNING: '@skip' tag found in staged .feature files:"
+  echo "$skip_feat" | sed 's/^/  - /'
   warn_found=true
 fi
 
@@ -30,5 +52,8 @@ if [ "$warn_found" = true ]; then
   echo "⚠️  Commit continuing, but review warnings above."
 fi
 
-# Optional: format staged files (consider lint-staged for speed)
-npx prettier --write .
+# Optional: format only staged files via lint-staged (faster)
+# npx --no-install lint-staged
+
+# Or: format whole repo (slower)
+# npx prettier --write .
