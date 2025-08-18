@@ -12,15 +12,14 @@ export default defineConfig({
   timeout: 30_000,
   expect: { timeout: 5_000 },
 
-  // Reporters
   reporter: [
     ['list'],
-    ['html', { outputFolder: 'playwright-report-api', open: 'never' }],
-    ['junit', { outputFile: 'reports/junit-api.xml' }],
+    ['html',  { outputFolder: 'playwright-report', open: 'never' }],
+    ['junit', { outputFile: 'test-results/api.xml' }],
   ],
 
-  // No browsers, but we still use the Playwright request context
   use: {
-    baseURL: process.env.BASE_URL
-  }
+    baseURL: process.env.BASE_URL,
+    ignoreHTTPSErrors: true,
+  },
 });
