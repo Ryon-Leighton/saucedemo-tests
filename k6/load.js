@@ -29,7 +29,10 @@ const homepage = new Trend('homepage_duration');
 export default function () {
   const res = http.get(BASE_URL, { headers: { 'cache-control': 'no-cache' } });
   homepage.add(res.timings.duration);
-  check(res, { 'status 200': (r) => r.status === 200, 'HTML shell present': (r) => String(r.body).includes('<div id="root"></div>') });
+  check(res, {
+    'status 200': (r) => r.status === 200,
+    'HTML shell present': (r) => String(r.body).includes('<div id="root"></div>'),
+  });
   sleep(1);
 }
 
