@@ -14,8 +14,9 @@ run_one() {
     return 0
   fi
   echo "▶️  k6: ${name}"
-  # K6_NAME is there if you ever want to key off it inside the test
-  K6_NAME="$name" k6 run "${file}"
+  K6_NAME="$name" k6 run \
+    --summary-export "${OUT_DIR}/${name}-summary.json" \
+    "${file}"
 }
 
 fail=0
@@ -29,7 +30,10 @@ case "${K6_TEST:-all}" in
       run_one "$base" || fail=1
       found_any=true
     done
-    [ "$found_any" = true ] || { echo "❌ No k6 scripts found in ${SCRIPTS_DIR}"; exit 2; }
+    if [ "$found_any" = false ]; then
+      echo "❌ No k6 test scripts found in ${SCRIPTS_DIR}"
+      exit 2
+    fi
     ;;
   smoke|load)
     run_one "${K6_TEST}" || fail=1
@@ -39,5 +43,4 @@ case "${K6_TEST:-all}" in
     exit 2
     ;;
 esac
-
 exit $fail

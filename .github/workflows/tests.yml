@@ -104,13 +104,13 @@ jobs:
         if: ${{ steps.run_e2e.outcome == 'failure' }}
         run: exit 1
 
-      # ---------- k6 (JS) ----------
+      # ---------- k6 ----------
       - name: Prepare k6 output dir & make runner executable
         run: |
           mkdir -p k6/out
           chmod +x k6/run.sh
 
-      - name: Run k6 (Docker)
+      - name: Run k6
         id: run_k6
         continue-on-error: true
         env:
@@ -118,13 +118,16 @@ jobs:
         run: |
           set +e
           docker run --rm \
+            --user 0:0 \
             --entrypoint /bin/sh \
             -e BASE_URL="${BASE_URL}" \
             -e K6_TEST=all \
             -v "${{ github.workspace }}/k6:/scripts" \
-            grafana/k6:latest /scripts/run.sh
+            grafana/k6:latest -lc '/scripts/run.sh; echo "== in-container /scripts/out =="; ls -la /scripts/out'
           code=$?
           echo "code=$code" >> $GITHUB_OUTPUT
+          echo "== on-host k6/out =="
+          ls -la k6/out || true
           exit 0
 
       - name: Upload k6 results
