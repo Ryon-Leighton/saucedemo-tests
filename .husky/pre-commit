@@ -52,4 +52,4 @@ if [ "$warn_found" = true ]; then
   echo "⚠️  Commit continuing, but review warnings above."
 fi
 
-npx --no-install lint-staged
+npx prettier --write .

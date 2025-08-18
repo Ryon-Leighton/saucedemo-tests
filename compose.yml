@@ -17,7 +17,6 @@ services:
       - .env
     environment:
       CI: 'true'
-      BASE_URL: ${BASE_URL:-https://www.saucedemo.com/}
     dns: [1.1.1.1, 8.8.8.8]
     networks: [lowmtu]
     volumes:
@@ -29,15 +28,13 @@ services:
   e2e:
     build:
       context: .
-      dockerfile: e2e/Dockerfile # <-- this was missing
+      dockerfile: e2e/Dockerfile
     shm_size: 1g
     working_dir: /app
     env_file:
       - .env
     environment:
       CI: 'true'
-      BASE_URL: ${BASE_URL:-https://www.saucedemo.com/}
-      GREP: ${GREP:-}
     dns: [1.1.1.1, 8.8.8.8]
     networks: [lowmtu]
     volumes:
@@ -52,3 +49,15 @@ services:
           npx playwright test;
         fi
       "
+  k6-all:
+    image: grafana/k6:latest
+    working_dir: /scripts
+    env_file:
+      - .env
+    environment:
+      K6_TEST: all
+    dns: [1.1.1.1, 8.8.8.8]
+    networks: [lowmtu]
+    volumes:
+      - ./k6:/scripts
+    entrypoint: ['/bin/sh', '/scripts/run.sh']

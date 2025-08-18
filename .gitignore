@@ -6,3 +6,7 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /e2e/generated/
+
+# K6
+k6/dist/
+k6/out/
