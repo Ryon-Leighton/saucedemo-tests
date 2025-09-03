@@ -92,7 +92,7 @@ The workflow:
 4. Run **k6** via official image + `k6/run.sh` → upload `k6/out/`.
 5. Fail the job if any suite fails.
 
-To run the workflow manually, go to your repo’s Actions tab, pick the Playwright Tests workflow in the left sidebar, then click Run workflow (top-right), choose the branch (e.g. main), and hit Run workflow.
+To run the workflow manually, go to the repo’s Actions tab, pick the Playwright Tests workflow in the left sidebar, then click Run workflow (top-right), choose the branch (e.g. main), and hit Run workflow.
 
 **Artifacts**
 
